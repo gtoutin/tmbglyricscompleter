@@ -10,3 +10,5 @@ def postStatus(update): # tweets out update (string)
 
 def postWithImage(update, pic): # tweets out picture
   print(api.PostUpdate(update, media=pic))
+
+postStatus("Hello world!!!")
