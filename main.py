@@ -125,17 +125,19 @@ while True:
   try:
     MetalDetector.statuses.filter(track=BOTNAME)
   except:
-    # this will dm me if the bot has an error
+    # this instance will dm me if the bot has an error
     errorbot = Twython(os.getenv("cons_key"), os.getenv("cons_secret"), os.getenv("access_token"), os.getenv("access_secret"))
 
-    errortext = "The bot had an error. Timestamp:\n" + str(datetime.now())
+    errortext = "The bot had an error."
+    # get the owner's info
+    ownerinfo = errorbot.lookup_user(screen_name=OWNERNAME)[0]
 
     dm_dict = {
       "event": {
         "type": "message_create",
         "message_create": {
           "target": {
-            "recipient_id": "1233135058413924358"
+            "recipient_id": ownerinfo["id"] # get the owner's id
           },
           "message_data": {
             "text": errortext
