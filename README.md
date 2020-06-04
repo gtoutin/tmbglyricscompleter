@@ -13,13 +13,13 @@ The bot will like each tweet that mentions it.
 
 ### Tagging the bot alongside lyrics
 
-If you want the bot to reply to your tweet containing lyrics, just tag @tmbgcompleter in your tweet.
+If you want the bot to reply to your tweet containing lyrics, just tag [@tmbgcompleter](https://twitter.com/tmbgcompleter) in your tweet.
 
 ![image](Sameexample.JPG "Image: tag inside tweet")
 
 ### Tagging the bot under lyrics
 
-The bot can also reply to a tweet above containing lyrics. If you would like the bot to complete lyrics from an existing tweet containing lyrics, reply and tag @tmbgcompleter.
+The bot can also reply to a tweet above containing lyrics. If you would like the bot to complete lyrics from an existing tweet containing lyrics, reply and tag [@tmbgcompleter](https://twitter.com/tmbgcompleter).
 
 ![image](Underexample.JPG "Image: tag under existing tweet")
 
