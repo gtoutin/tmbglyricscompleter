@@ -15,13 +15,13 @@ The bot will like each tweet that mentions it.
 
 If you want the bot to reply to your tweet containing lyrics, just tag @tmbgcompleter in your tweet.
 
-![image](Sameexample.jpg "Image: tag inside tweet")
+![image](Sameexample.JPG "Image: tag inside tweet")
 
 ### Tagging the bot under lyrics
 
 The bot can also reply to a tweet above containing lyrics. If you would like the bot to complete lyrics from an existing tweet containing lyrics, reply and tag @tmbgcompleter.
 
-![image](Underexample.jpg "Image: tag under existing tweet")
+![image](Underexample.JPG "Image: tag under existing tweet")
 
 
 ## How does it work? Where does it live?
