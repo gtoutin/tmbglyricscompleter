@@ -31,7 +31,7 @@ The bot can also reply to a tweet above containing lyrics. If you would like the
 3. It then gets the lyrics, puts it into the [tmbw.net search engine](http://tmbw.net/wiki/index.php?title=Special%3ASearch&profile=advanced&search=&fulltext=Search&ns100=1&profile=advanced), and gets the lyrics page.
 4. Then, it finds the most similar phrase to the user's tweet, gets the next 3 lines, and tweets it out to whoever mentioned it.
 
-The bot is hosted on [repl.it](repl.it) and pinged every 20 minutes with [Uptime Robot](https://uptimerobot.com/). If there's an error, the bot will DM me.
+The bot is hosted on [repl.it](https://repl.it/~) and pinged every 20 minutes with [Uptime Robot](https://uptimerobot.com/). If there's an error, the bot will DM me.
 
 See the code for more interesting details! You are free to use my code to make your own twitter bot. I have made it easy to swap out my bot's handle and my handle for your own. All helper functions are in particle.py. The main.py file contains a fully functional streaming bot, just swap out the [secrets](https://developer.twitter.com/en/docs/basics/authentication/guides/authentication-best-practices) and the on_success function with what you want your own bot to do and you're set!
 
