@@ -22,6 +22,7 @@ The bot can also reply to a tweet above containing lyrics. If you would like the
 ### Asking the bot to identify a song
 
 To identify a song, tag [@tmbgcompleter](https://twitter.com/tmbgcompleter) underneath the tweet containing only lyrics. The bot will also reply to your tweet with the next few lyrics.
+
 Tweet this:
 [@tmbgcompleter](https://twitter.com/tmbgcompleter) ID
 
