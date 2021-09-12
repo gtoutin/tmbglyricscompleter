@@ -5,6 +5,10 @@ from bs4 import BeautifulSoup
 def reply(botapi, username, tweetid, nextlyric):
   '''Reply to the user with the reply text given core Twython API handle, user screen name, and reply text.'''
   message = "@" + username + "\n" + nextlyric
+
+  # Make sure message isn't too long
+  message = message[0:279]
+
   botapi.update_status(status=message, in_reply_to_status_id=tweetid) # create tweet
 
 
@@ -60,7 +64,7 @@ def similarity(text1, text2):
   Similarity is calculated by counting the frequency of letters among both texts, comparing the frequencies, and converting it to a percentage.
   '''
 
-  alphabet = "abcdefghijklmnopqrstuvwxyz,.?'\":;()!1234567890\n "
+  alphabet = "-abcdefghijklmnopqrstuvwxyz,.?'\":;()!1234567890\n "
   letter_dict1 = {}
   letter_dict2 = {}
 
@@ -111,17 +115,18 @@ def mentions(data):
   
   return mentioned_users, tagged_length
 
-def search(query):
+def search(query, id_mode=False):
   '''Grab all the lyrics of the song from tmbw.net.'''
   searchurl = 'http://tmbw.net/wiki/index.php?title=Special%3ASearch&profile=advanced&fulltext=Search&ns100=1&profile=advanced&search=' + query
-  data = requests.get(searchurl)
-  soup = BeautifulSoup(data.text,features="html.parser")
-  element = soup.find("div", class_="mw-search-result-heading")
+  data = requests.get(searchurl)  # get page data
+  soup = BeautifulSoup(data.text,features="html.parser")  # parse page data
+  element = soup.find("div", class_="mw-search-result-heading") # div with the link
   try:
-    link = element.find("a").get('href')
+    link = element.find("a").get('href')  # get the link
+    title = element.find("a").get("title") # get page title
   except:
     print("Page not found")   # return None if no results were found
-    return None
+    return None, None
 
   data = requests.get("http://tmbw.net" + link)
   soup = BeautifulSoup(data.text,features="html.parser")
@@ -133,13 +138,9 @@ def search(query):
   for stanza in stanza_elems:
     stanza = stanza.text  # Ditch the <p></p> tags
     stanzas = stanzas + stanza # Add the stanza to the overall lyrics
-
   
-  '''
-  # convert the stanza into a list of strings
-  stanza = stanza.strip().split("\n")
-  stanzas.append(stanza)
-  '''
-  
+  if id_mode: # if user just wants an ID
+    title = title[7:]   # each one starts with "Lyrics:" get rid of it
+    return stanzas, title
 
-  return stanzas
+  return stanzas, None
