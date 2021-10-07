@@ -1,6 +1,7 @@
 # Functions to make the bot go vroom
 import requests
 from bs4 import BeautifulSoup
+from thefuzz import fuzz
 
 def reply(botapi, username, tweetid, nextlyric):
   '''Reply to the user with the reply text given core Twython API handle, user screen name, and reply text.'''
@@ -63,40 +64,7 @@ def similarity(text1, text2):
   Given 2 texts of identical length, will output a percent similarity as a float between 0 and 1.
   Similarity is calculated by counting the frequency of letters among both texts, comparing the frequencies, and converting it to a percentage.
   '''
-
-  alphabet = "-abcdefghijklmnopqrstuvwxyz,.?'\":;()!1234567890\n "
-  letter_dict1 = {}
-  letter_dict2 = {}
-
-  for letter in alphabet: # Letters are the keys, values are frequency
-    letter_dict1.setdefault(letter,0) # Start every letter with 0 frequency
-    letter_dict2.setdefault(letter,0)
-
-  # Get frequencies for text1
-  for letter in text1.lower(): 
-    if letter in letter_dict1: 
-        letter_dict1[letter] += 1
-    else: 
-        letter_dict1[letter] = 1
-
-  # Get frequencies for text2
-  for letter in text2.lower(): 
-    if letter in letter_dict2: 
-        letter_dict2[letter] += 1
-    else: 
-        letter_dict2[letter] = 1
-  
-  # Compare the 2 dictionaries to get the raw similarity
-  # Start at 100% similar and take away points for differences.
-
-  denominator = sum(letter_dict1.values()) # Both dicts have the same frequency sum. This is necessary to compute percentage.
-  rawsimilarity = denominator # keeps track of how many letters are in common
-
-  # Compare the frequencies of the contents of both dicts.
-  for letter in letter_dict1:
-    rawsimilarity -= abs(letter_dict1[letter]-letter_dict2[letter])
-  
-  return float(rawsimilarity / denominator)
+  return fuzz.ratio(text1, text2)/100.0
 
 
 def findall(s, ch):
