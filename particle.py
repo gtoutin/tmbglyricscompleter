@@ -59,6 +59,7 @@ def getnextlyric(text1, text2, tagged_length):
 
   return next_lyrics
  
+ 
 def similarity(text1, text2):
   '''
   Given 2 texts of identical length, will output a percent similarity as a float between 0 and 1.
@@ -72,6 +73,7 @@ def findall(s, ch):
   Thanks to Lev Levitsky on Stack Overflow.'''
   return [i for i, ltr in enumerate(s) if ltr == ch]
 
+
 def mentions(data):
   '''Returns list of mentioned users and length of tagged section (to know when lyrics start).'''
   mentioned_users = []
@@ -82,6 +84,7 @@ def mentions(data):
     tagged_length += len(entity["screen_name"])+2  # +2 for the @ symbol and space
   
   return mentioned_users, tagged_length
+
 
 def search(query, id_mode=False):
   '''Grab all the lyrics of the song from tmbw.net.'''
