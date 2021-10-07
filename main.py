@@ -45,9 +45,6 @@ class MentionStream(TwythonStreamer):
           prevlyric = data["text"]
           prevlyric = re.sub("\s?@[\w]+\s?", " ", prevlyric)
           prevlyric = re.sub("\n", " ", prevlyric) # fix bug causing fails
-          # prevlyric = prevlyric.replace("@","")
-          # for name in mentionedppl:
-          #   prevlyric = prevlyric.replace(name, "")
           prevlyric = prevlyric.strip()
 
           if (len(data['text'])>tagged_length and prevlyric.lower()=='id'):  # if user just wants to id the song
@@ -68,9 +65,6 @@ class MentionStream(TwythonStreamer):
               prevlyric = above_data["text"]
               prevlyric = re.sub("\s?@[\w]+\s?", " ", prevlyric)
               prevlyric = re.sub("\n", " ", prevlyric) # fix bug causing fails
-              # prevlyric = prevlyric.replace("@","")
-              # for name in above_mentioned:
-              #   prevlyric = prevlyric.replace(name, "")
               prevlyric = prevlyric.strip()
                             
               #Find the lyrics to the song
@@ -139,9 +133,6 @@ class MentionStream(TwythonStreamer):
               prevlyric = above_data["text"]
               prevlyric = re.sub("\s?@[\w]+\s?", " ", prevlyric)
               prevlyric = re.sub("\n", " ", prevlyric) # fix bug causing fails
-              # prevlyric = prevlyric.replace("@","")
-              # for name in above_mentioned:
-              #   prevlyric = prevlyric.replace(name, "")
               prevlyric = prevlyric.strip()
               
               #Find the lyrics to the song
