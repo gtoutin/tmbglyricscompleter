@@ -59,7 +59,7 @@ def getnextlyric(text1, text2, tagged_length):
 
   return next_lyrics
  
- 
+
 def similarity(text1, text2):
   '''
   Given 2 texts of identical length, will output a percent similarity as a float between 0 and 1.
@@ -89,6 +89,9 @@ def mentions(data):
 def search(query, id_mode=False):
   '''Grab all the lyrics of the song from tmbw.net.'''
   searchurl = 'http://tmbw.net/wiki/index.php?title=Special%3ASearch&profile=advanced&fulltext=Search&ns100=1&profile=advanced&search=' + query
+
+  print(f"\n\nSearching for query:\n{query}\n\n")
+
   data = requests.get(searchurl)  # get page data
   soup = BeautifulSoup(data.text,features="html.parser")  # parse page data
   element = soup.find("div", class_="mw-search-result-heading") # div with the link

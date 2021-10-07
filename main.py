@@ -18,7 +18,7 @@ import sys
 import re
 
 BOTNAME = "tmbgcompleter"   # bot's twitter handle
-OWNERNAME = "guitar_budgie" # bot's owners' twitter handle
+OWNERNAME = "guitar_budgie" # bot's owner's twitter handle
 
 class MentionStream(TwythonStreamer):
     def on_success(self, data):
@@ -42,27 +42,27 @@ class MentionStream(TwythonStreamer):
 
           # TODO: is this even needed once better matching is implemented????
           #Remove tags from text
-          prevlyric = data["text"]
+          prevlyric = data["extended_tweet"]["full_text"]
           prevlyric = re.sub("\s?@[\w]+\s?", " ", prevlyric)
           prevlyric = re.sub("\n", " ", prevlyric) # fix bug causing fails
           prevlyric = prevlyric.strip()
 
-          if (len(data['text'])>tagged_length and prevlyric.lower()=='id'):  # if user just wants to id the song
+          if (len(data["extended_tweet"]['full_text'])>tagged_length and prevlyric.lower()=='id'):  # if user just wants to id the song
             print("They want an ID!")
 
             find_id = True
 
             # Lyrics are in above tweet
-            above_data = botapi.show_status(id=replytweetid)
+            above_data = botapi.show_status(id=replytweetid, tweet_mode="extended")
             above_mentioned, above_length = particle.mentions(above_data)
           
-            if (len(above_data["text"])<=above_length): # if the tweet above it doesn't have lyrics either
+            if (len(above_data["extended_tweet"]["full_text"])<=above_length): # if the tweet above it doesn't have lyrics either
               emptymessage = "And right away I knew I made\nA mistake\nI left without my senses\nAnd I can't see anything\n\nOops! I don't see any lyrics."
               particle.reply(botapi, username, tweetid, emptymessage)
 
             else: # has lyrics above_data["text"]
               #Remove tags from text
-              prevlyric = above_data["text"]
+              prevlyric = above_data["extended_tweet"]["full_text"]
               prevlyric = re.sub("\s?@[\w]+\s?", " ", prevlyric)
               prevlyric = re.sub("\n", " ", prevlyric) # fix bug causing fails
               prevlyric = prevlyric.strip()
@@ -90,7 +90,7 @@ class MentionStream(TwythonStreamer):
               particle.reply(botapi, username, tweetid, answerlyrics)
 
           #----------------------------------------------
-          elif (len(data["text"])>tagged_length): # tweet has lyrics
+          elif (len(data["extended_tweet"]["full_text"])>tagged_length): # tweet has lyrics
             print("They want the bot to answer!")
             
             # Add @tmbotg as a 100% correct source of lyrics
@@ -121,16 +121,16 @@ class MentionStream(TwythonStreamer):
           else: # if the tweet doesn't have lyrics, look above it
             print("They want to reply to a tweet above!")
 
-            above_data = botapi.show_status(id=replytweetid)
+            above_data = botapi.show_status(id=replytweetid, tweet_mode="extended")
             above_mentioned, above_length = particle.mentions(above_data)
           
-            if (len(above_data["text"])<=above_length): # if the tweet above it doesn't have lyrics either
+            if (len(above_data["extended_tweet"]["full_text"])<=above_length): # if the tweet above it doesn't have lyrics either
               emptymessage = "And right away I knew I made\nA mistake\nI left without my senses\nAnd I can't see anything\n\nOops! I don't see any lyrics."
               particle.reply(botapi, username, tweetid, emptymessage)
 
-            else: # has lyrics above_data["text"]
+            else: # has lyrics above_data["extended_tweet"]["full_text"]
               #Remove tags from text
-              prevlyric = above_data["text"]
+              prevlyric = above_data["extended_tweet"]["full_text"]
               prevlyric = re.sub("\s?@[\w]+\s?", " ", prevlyric)
               prevlyric = re.sub("\n", " ", prevlyric) # fix bug causing fails
               prevlyric = prevlyric.strip()
