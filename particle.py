@@ -57,6 +57,7 @@ def getnextlyric(text1, text2, tagged_length):
 
   next_lyrics = rest_of_song[0:location]
 
+  print(next_lyrics)
   return next_lyrics
  
 

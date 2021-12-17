@@ -42,12 +42,16 @@ class MentionStream(TwythonStreamer):
 
           # TODO: is this even needed once better matching is implemented????
           #Remove tags from text
-          prevlyric = data["extended_tweet"]["full_text"]
-          prevlyric = re.sub("\s?@[\w]+\s?", " ", prevlyric)
-          prevlyric = re.sub("\n", " ", prevlyric) # fix bug causing fails
-          prevlyric = prevlyric.strip()
+          prevlyric = data.get("extended_tweet", "no extended")
+          if prevlyric == "no extended":
+            prevlyric = data["text"]
+          else:
+            prevlyric = prevlyric["full_text"]
+          cleanlyric = re.sub("\s?@[\w]+\s?", " ", prevlyric)
+          cleanlyric = re.sub("\n", " ", cleanlyric) # fix bug causing fails
+          cleanlyric = cleanlyric.strip()
 
-          if (len(data["extended_tweet"]['full_text'])>tagged_length and prevlyric.lower()=='id'):  # if user just wants to id the song
+          if (len(prevlyric)>tagged_length and cleanlyric.lower()=='id'):  # if user just wants to id the song
             print("They want an ID!")
 
             find_id = True
@@ -62,13 +66,17 @@ class MentionStream(TwythonStreamer):
 
             else: # has lyrics above_data["text"]
               #Remove tags from text
-              prevlyric = above_data["extended_tweet"]["full_text"]
-              prevlyric = re.sub("\s?@[\w]+\s?", " ", prevlyric)
-              prevlyric = re.sub("\n", " ", prevlyric) # fix bug causing fails
-              prevlyric = prevlyric.strip()
+              prevlyric = above_data.get("extended_tweet", "no extended")
+              if prevlyric == "no extended":
+                prevlyric = above_data["text"]
+              else:
+                prevlyric = prevlyric["full_text"]
+              cleanlyric = re.sub("\s?@[\w]+\s?", " ", prevlyric)
+              cleanlyric = re.sub("\n", " ", cleanlyric) # fix bug causing fails
+              cleanlyric = cleanlyric.strip()
                             
               #Find the lyrics to the song
-              lyrics, title = particle.search(prevlyric, find_id)
+              lyrics, title = particle.search(cleanlyric, find_id)
 
               if lyrics==None:  # Page not found error
                 notfounderror = "Always busy, often broken.\n\nLyric not found.\nTry including more lyrics."
@@ -76,7 +84,7 @@ class MentionStream(TwythonStreamer):
                 return  # end the function, there are no lyrics
 
               #Find the next lyrics in the page
-              answerlyrics = particle.getnextlyric(prevlyric, lyrics, above_length)
+              answerlyrics = particle.getnextlyric(cleanlyric, lyrics, above_length)
 
               if find_id:
                 id_message = 'That was from "' + title + '"'
@@ -90,22 +98,22 @@ class MentionStream(TwythonStreamer):
               particle.reply(botapi, username, tweetid, answerlyrics)
 
           #----------------------------------------------
-          elif (len(data["extended_tweet"]["full_text"])>tagged_length): # tweet has lyrics
+          elif (len(prevlyric)>tagged_length): # tweet has lyrics
             print("They want the bot to answer!")
             
             # Add @tmbotg as a 100% correct source of lyrics
             if username=="tmbotg":
-              prevlyric = '"' + prevlyric + '"' # Search for exact phrase
+              cleanlyric = '"' + cleanlyric + '"' # Search for exact phrase
 
             #Find the lyrics to the song
-            lyrics, title = particle.search(prevlyric, False)
+            lyrics, title = particle.search(cleanlyric, False)
             if lyrics==None:  # Page not found error
               notfounderror = "Always busy, often broken.\n\nLyric not found.\nTry including more lyrics."
               particle.reply(botapi, username, tweetid, notfounderror)
               return  # end the function, there are no lyrics
 
             #Find the next lyrics in the page
-            answerlyrics = particle.getnextlyric(prevlyric, lyrics, tagged_length)
+            answerlyrics = particle.getnextlyric(cleanlyric, lyrics, tagged_length)
             
             if answerlyrics==None:  # Lyric was the end of the song
               endofsongmessage = "Awesome! That was the end of the song."
@@ -123,20 +131,31 @@ class MentionStream(TwythonStreamer):
 
             above_data = botapi.show_status(id=replytweetid, tweet_mode="extended")
             above_mentioned, above_length = particle.mentions(above_data)
+
+            prevlyric = above_data.get("extended_tweet", "no extended")
+            if prevlyric == "no extended":
+              prevlyric = above_data["text"]
+            else:
+              prevlyric = prevlyric["full_text"]
           
-            if (len(above_data["extended_tweet"]["full_text"])<=above_length): # if the tweet above it doesn't have lyrics either
+            if (len(prevlyric)<=above_length): # if the tweet above it doesn't have lyrics either
               emptymessage = "And right away I knew I made\nA mistake\nI left without my senses\nAnd I can't see anything\n\nOops! I don't see any lyrics."
               particle.reply(botapi, username, tweetid, emptymessage)
 
             else: # has lyrics above_data["extended_tweet"]["full_text"]
               #Remove tags from text
-              prevlyric = above_data["extended_tweet"]["full_text"]
+              # prevlyric = above_data["extended_tweet"]["full_text"]
+              prevlyric = above_data.get("extended_tweet", "no extended")
+              if prevlyric == "no extended":
+                prevlyric = above_data["text"]
+              else:
+                prevlyric = prevlyric["full_text"]
               prevlyric = re.sub("\s?@[\w]+\s?", " ", prevlyric)
-              prevlyric = re.sub("\n", " ", prevlyric) # fix bug causing fails
-              prevlyric = prevlyric.strip()
+              cleanlyric = re.sub("\n", " ", cleanlyric) # fix bug causing fails
+              cleanlyric = cleanlyric.strip()
               
               #Find the lyrics to the song
-              lyrics, title = particle.search(prevlyric)
+              lyrics, title = particle.search(cleanlyric)
 
               if lyrics==None:  # Page not found error
                 notfounderror = "Always busy, often broken.\n\nLyric not found.\nTry including more lyrics."
@@ -144,7 +163,7 @@ class MentionStream(TwythonStreamer):
                 return  # end the function, there are no lyrics
 
               #Find the next lyrics in the page
-              answerlyrics = particle.getnextlyric(prevlyric, lyrics, above_length)
+              answerlyrics = particle.getnextlyric(cleanlyric, lyrics, above_length)
 
               if answerlyrics==None:  # Lyric was the end of the song
                 endofsongmessage = "Awesome! That was the end of the song."
